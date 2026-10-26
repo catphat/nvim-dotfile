@@ -3,6 +3,8 @@
 LazyVim with a VS Code dark theme, C#/Godot tooling, and TypeScript/web support.
 `lazy-lock.json` pins plugin versions; `lua/plugins/` contains additions and overrides.
 
+See [KEYMAPS.md](KEYMAPS.md) for the keybinding reference (custom, LazyVim, and plugin controls).
+
 ## Configuration
 
 - `lua/config/lazy.lua`: bootstrap, plugin imports, extras for C#, TypeScript,

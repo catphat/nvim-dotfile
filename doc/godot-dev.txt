@@ -1,0 +1,85 @@
+*godot-dev*  Godot development in this Neovim setup
+
+Open the project in Godot, then open its scripts in Neovim. Godot provides
+GDScript completion, diagnostics, hover help (K), definitions (gd), references
+(gr), and renaming (<Space>cr) over localhost port 6005. If Neovim was opened
+first, press <Space>Gl to restart the connection once Godot is ready. This also
+clears a client left uninitialized after an earlier refused connection.
+
+GDScript uses tabs with a width of four. gdformat handles formatting through
+<Space>cf and the usual LazyVim format-on-save behavior. gdlint runs on save.
+The Godot editor must have the SAME project open as the Neovim buffer.
+Scenes, resources, project.godot, shaders and shader includes have highlighting.
+
+Project commands ~
+    <Space>Ge     Open the current project in the Godot editor
+    <Space>Gr     Run the project's main scene
+    <Space>Gs     Run the current .tscn scene
+    <Space>Gb     Build the project's C# .csproj with dotnet build
+    <Space>Gl     Connect/retry the GDScript language server
+
+Run and build commands save modified buffers first. Output stays in a terminal.
+The nearest project.godot determines the project root, even in a monorepo.
+
+Debugging ~
+    <Space>db     Toggle breakpoint
+    <Space>dc     Launch/attach or continue (choose a configuration)
+    <Space>dO     Step over
+    <Space>di     Step into
+    <Space>do     Step out
+    <Space>dt     Terminate debugging
+    <Space>du     Toggle debugger UI
+
+GDScript: keep the project open in Godot. From a .gd buffer, choose
+"Godot: run project (GDScript)" to launch through Godot's debug adapter on 6006.
+The attach configuration is for a game already running from that editor.
+
+C#: use Godot's .NET edition and the installed .NET SDK. Generate the .csproj
+and .sln in Godot by creating the first C# script, then build once. OmniSharp
+provides completion, navigation, diagnostics and formatting as before.
+For debugging, start the game from the .NET editor, then choose
+"Godot C#: attach to game process" from a .cs buffer. Select the game process,
+not the editor process. netcoredbg provides managed debugging; Godot's built-in
+GDScript adapter does not debug C#. Build in Debug mode to produce symbols.
+
+Executable and ports ~
+Set GODOT_BIN to the full executable path of your preferred Godot build, e.g.:
+    export GODOT_BIN="/path/to/Godot_mono_linux.x86_64"
+Alternatively set vim.g.godot_bin in lua/config/options.lua.
+Without an override, the commands search godot-mono, godot4-mono, godot,
+godot4, then ~/dev/repos/godot/bin/godot.linuxbsd.editor.x86_64.
+For custom .NET builds, add a godot-mono executable to PATH (for example, in
+~/.local/bin). Neovim detects it automatically.
+Keep bin/GodotSharp alongside that executable. The executable
+setting does not start an LSP server; GDScript's server belongs to the open
+Godot editor.
+
+Set GDScript_Port (default 6005) and GODOT_DAP_PORT (default 6006) before
+starting Neovim if you change the corresponding ports in Godot Editor Settings
+under Network > Language Server and Network > Debug Adapter.
+
+Optional: open scripts from Godot in an existing Neovim window ~
+Start Neovim with a listening socket:
+    nvim --listen "$HOME/.cache/nvim/godot.pipe"
+In Godot Editor Settings > Text Editor > External, enable Use External Editor:
+    Exec Path:  /usr/bin/nvim
+    Exec Flags: --server /absolute/path/to/godot.pipe --remote "{file}"
+Replace /absolute/path/to/godot.pipe with the full path used above; do not
+rely on Godot expanding $HOME or ~ in this field.
+Keep that Neovim instance running. This opens the selected file in that window.
+Enable Text Editor > Behavior > Auto Reload Scripts on External Change.
+For C# also select Custom under Dotnet > Editor > External Editor and configure
+its Custom Exec Path and Custom Exec Path Args with the same executable/flags.
+Godot settings are left for you to select; this config does not overwrite them.
+
+Troubleshooting ~
+    :LspInfo          Check GDScript/OmniSharp attachment
+    :Mason            Inspect gdtoolkit, netcoredbg and OmniSharp installation
+    :ConformInfo      Check formatter availability
+    :DapShowLog       Inspect debugger errors
+    :checkhealth      Check editor/plugin dependencies
+
+Godot reference:
+https://docs.godotengine.org/en/stable/tutorials/editor/external_editor.html
+
+vim:tw=78:ts=4:ft=help:norl:

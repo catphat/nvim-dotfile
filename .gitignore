@@ -1,0 +1,41 @@
+# Credentials and machine-local configuration
+.env
+.env.*
+.netrc
+*.pem
+*.key
+*.p12
+*.pfx
+/secrets/
+/credentials/
+/.nvim.lua
+/.nvimrc
+/.exrc
+/.lazy.lua
+# Private plugin overrides, automatically loaded by Lazy's plugins import
+/lua/plugins/local.lua
+
+# Editor history, sessions, backups, and logs
+*.swp
+*.swo
+*~
+*.bak
+*.log
+/Session.vim
+/Sessionx.vim
+/sessions/
+/shada/
+/undo/
+/swap/
+/backup/
+/view/
+/log/
+
+# Generated data and installed tools (normally outside the config directory)
+/cache/
+/state/
+/lazy/
+/mason/
+/tools/
+/doc/tags
+.DS_Store
